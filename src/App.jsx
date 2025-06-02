@@ -5,7 +5,7 @@ function App() {
   
   return (
     <div>
-      <Home/> //rendering Home component
+      <Home/> {/* render whole home component*/}
     </div>
   )
 }
