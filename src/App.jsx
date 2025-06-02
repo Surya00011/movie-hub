@@ -5,8 +5,7 @@ function App() {
   
   return (
     <div>
-      <NavBar/>
-      <Home/>
+      <Home/> //rendering Home component
     </div>
   )
 }

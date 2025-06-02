@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { getAllMovies } from '../service/movieService';
+import { getAllMovies, getMovieByTitle } from '../service/movieService';
 import MovieList from './MovieList';
+import NavBar from './NavBar';
+
 const Home = () => {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -21,13 +24,37 @@ const Home = () => {
     fetchMovies();
   }, []);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error loading movies: {error.message}</div>;
+  const handleSearch = async (query) => {
+    if (!query) return;
+
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await getMovieByTitle(query);
+      const resultArray = Array.isArray(data) ? data : [data];
+      setMovies(resultArray);
+    } catch (err) {
+      setError(err);
+      setMovies([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div>
-      <MovieList movies={movies} />
-    </div>
+    <>
+      <NavBar onSearch={handleSearch} /> {/*display nav on top of movie list*/}
+      <div className="container my-4">
+        {loading && <div>Loading...</div>}
+        {error && <div className="text-danger">Error: {error.message}</div>}
+        {!loading && !error && movies.length === 0 && (
+          <div>No movies found.</div>
+        )}
+        {!loading && !error && movies.length > 0 && (
+          <MovieList movies={movies} /> 
+        )} {/*sending fetched movies list as props to MovieList component*/}
+      </div>
+    </>
   );
 };
 

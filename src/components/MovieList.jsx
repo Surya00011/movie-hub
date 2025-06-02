@@ -10,8 +10,8 @@ function MovieList({ movies }) {
       ) : (
         movies.map((movie, idx) => <MovieCard key={idx} movie={movie} />)
       )}
-    </Container>
-  );
+    </Container> 
+  );{ /* Displaying the list of movies using MovieCard component */}
 }
 
 export default MovieList;
